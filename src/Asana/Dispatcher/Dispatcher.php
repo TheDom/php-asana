@@ -7,6 +7,16 @@ use \Httpful\Mime;
 
 class Dispatcher
 {
+    public function __construct()
+    {
+        if (version_compare(phpversion(), '7.0', '<')) {
+            \Httpful\Httpful::register(
+                \Httpful\Mime::JSON, 
+                new \Asana\Dispatcher\Handlers\JsonHandler(array('parse_options' => JSON_BIGINT_AS_STRING))
+            );
+        }
+    }
+
     public function request($method, $uri, $requestOptions)
     {
         if (isset($requestOptions['params'])) {
